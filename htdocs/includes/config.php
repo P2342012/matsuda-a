@@ -21,6 +21,10 @@ define('UPLOAD_DIR', 'uploads/');
 ini_set('memory_limit', '3G');
 set_time_limit(300);
 
+// パスワードハッシュ用定数
+define('PASSWORD_ALGO', PASSWORD_DEFAULT);
+define('PASSWORD_OPTIONS', ['cost' => 12]);
+
 try {
   $pdo = new PDO(
     "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8mb4",

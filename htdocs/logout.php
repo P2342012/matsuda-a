@@ -8,4 +8,3 @@ session_destroy();
 // ログイン画面にリダイレクト
 header("Location: index.php");
 exit;
-?>

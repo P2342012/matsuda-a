@@ -67,10 +67,12 @@ header {
 }
 
 .logout-btn {
-    background-color: #ebebeb; /* 明るいグレーに変更 */
+    background-color: #ebebeb;
+    /* 明るいグレーに変更 */
     margin-left: 10px;
     padding: 8px 15px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* 影を追加 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* 影を追加 */
 }
 
 .logout-btn:hover {
@@ -162,10 +164,13 @@ header {
 }
 
 .category {
-    background-color: #e3f2fd; /* 薄いブルーに変更 */
-    color: #1a237e; /* ダークブルーに変更 */
+    background-color: #e3f2fd;
+    /* 薄いブルーに変更 */
+    color: #1a237e;
+    /* ダークブルーに変更 */
     padding: 5px 12px;
-    border-radius: 12px; /* 丸みを増加 */
+    border-radius: 12px;
+    /* 丸みを増加 */
     font-weight: 600;
 }
 
@@ -205,14 +210,17 @@ header {
 
 /* 追加：コメント日付の色調整 */
 .comment-date {
-    color: #757575; /* 若干濃い色に変更 */
+    color: #757575;
+    /* 若干濃い色に変更 */
 }
 
 .comment-content {
-    margin: 8px 0;/* 変更済み */
+    margin: 8px 0;
+    /* 変更済み */
     white-space: pre-wrap;
     word-wrap: break-word;
-    line-height: 0.8;/* 変更済み */
+    line-height: 0.8;
+    /* 変更済み */
 }
 
 .scroll-to-bottom {
@@ -228,7 +236,7 @@ header {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     z-index: 1000;
     transition: background-color 0.3s, transform 0.3s;
 }
@@ -453,4 +461,28 @@ legend {
         width: 100%;
         text-align: center;
     }
+}
+
+* 成功メッセージスタイル */ .success {
+    background-color: #dff0d8;
+    color: #3c763d;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    border-left: 4px solid #3c763d;
+}
+
+/* アカウントフォーム調整 */
+.account-form .form-group {
+    margin-bottom: 25px;
+}
+
+/* 管理者バッジスタイル調整 */
+.admin-badge {
+    background-color: #ff9800;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    margin-left: 5px;
 }

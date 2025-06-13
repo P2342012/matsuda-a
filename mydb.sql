@@ -1,52 +1,63 @@
--- MariaDB dump 10.19  Distrib 10.4.32-MariaDB, for Win64 (AMD64)
---
--- Host: localhost    Database: study2
--- ------------------------------------------------------
--- Server version	10.4.32-MariaDB
+-- (A2) データベース作成（既存の場合はスキップ）
+CREATE DATABASE IF NOT EXISTS mydb 
+  CHARACTER SET utf8mb4 
+  COLLATE utf8mb4_unicode_ci;
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+-- (A3) ユーザー作成（安全な方法で）
+DROP USER IF EXISTS 'testuser'@'localhost'; -- 既存ユーザー削除
+CREATE USER 'testuser'@'localhost' IDENTIFIED BY 'pass';
+GRANT ALL PRIVILEGES ON mydb.* TO 'testuser'@'localhost';
 
---
--- Table structure for table `mst_product`
---
+-- (A4) mydbを使うことを宣言する
+USE mydb;
 
-DROP TABLE IF EXISTS `mst_product`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `mst_product` (
-  `code` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(30) NOT NULL,
-  `price` int(11) NOT NULL,
-  `setsumei` varchar(200) NOT NULL,
-  PRIMARY KEY (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+-- ユーザーテーブル（先に基本構造を作成）
+CREATE TABLE users (
+    student_id CHAR(7) PRIMARY KEY
+);
 
---
--- Dumping data for table `mst_product`
---
+-- 必要な列を追加（順序通りに）
+ALTER TABLE users 
+  ADD COLUMN name VARCHAR(100) NOT NULL,
+  ADD COLUMN password_hash VARCHAR(255) NOT NULL,
+  ADD COLUMN is_admin BOOLEAN NOT NULL DEFAULT FALSE;
 
-LOCK TABLES `mst_product` WRITE;
-/*!40000 ALTER TABLE `mst_product` DISABLE KEYS */;
-/*!40000 ALTER TABLE `mst_product` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+-- スレッドテーブル
+CREATE TABLE threads (
+    thread_id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(100) NOT NULL,
+    category VARCHAR(50) NOT NULL,
+    created_by CHAR(7) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (created_by) REFERENCES users(student_id)
+);
 
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+-- コメントテーブル
+CREATE TABLE comments (
+    comment_id INT AUTO_INCREMENT PRIMARY KEY,
+    thread_id INT NOT NULL,
+    student_id CHAR(7) NOT NULL,
+    content TEXT NOT NULL,
+    file_path TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (thread_id) REFERENCES threads(thread_id) ON DELETE CASCADE,
+    FOREIGN KEY (student_id) REFERENCES users(student_id)
+);
 
--- Dump completed on 2025-06-12 13:46:39
+-- アップロードフォルダテーブル
+CREATE TABLE uploaded_folders (
+    folder_id INT AUTO_INCREMENT PRIMARY KEY,
+    comment_id INT NOT NULL,
+    folder_path VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (comment_id) REFERENCES comments(comment_id) ON DELETE CASCADE
+);
+
+-- 管理者アカウント登録（重複しないように1回のみ）
+INSERT INTO users (student_id, name, password_hash, is_admin)
+VALUES (
+  '9877389',
+  '【管理者】研究室長',
+  '$2y$10$OYtBZzRbEO3UmJZzV7IKnOYzfdKRz7lNTDyz3Zrbi5UmmvG2hL9WC', 
+  TRUE
+);

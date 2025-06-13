@@ -32,4 +32,3 @@ $stmt->execute([
 
 header("Location: thread.php?id=" . $_POST['thread_id']);
 exit;
-?>

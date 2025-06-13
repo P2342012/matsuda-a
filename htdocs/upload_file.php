@@ -95,7 +95,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // エラーメッセージ表示関数
-function getUploadErrorMessage($code) {
+function getUploadErrorMessage($code)
+{
     $errors = [
         UPLOAD_ERR_INI_SIZE => "ファイルサイズが大きすぎます（最大3GB）",
         UPLOAD_ERR_FORM_SIZE => "ファイルサイズがフォームの制限を超えています",

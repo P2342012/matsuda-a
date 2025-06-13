@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $pdo->prepare("SELECT created_by FROM threads WHERE thread_id = ?");
         $stmt->execute([$_POST['thread_id']]);
         $thread = $stmt->fetch();
-        
+
         if ($thread && ($_SESSION['student_id'] === $thread['created_by'] || $_SESSION['student_id'] === '9877389')) {
             $pdo->prepare("DELETE FROM threads WHERE thread_id = ?")->execute([$_POST['thread_id']]);
             header("Location: home.php");
@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $pdo->prepare("SELECT thread_id, student_id FROM comments WHERE comment_id = ?");
         $stmt->execute([$_POST['comment_id']]);
         $comment = $stmt->fetch();
-        
+
         if ($comment && ($_SESSION['student_id'] === $comment['student_id'] || $_SESSION['student_id'] === '9877389')) {
             $pdo->prepare("DELETE FROM comments WHERE comment_id = ?")->execute([$_POST['comment_id']]);
             header("Location: thread.php?id=" . $comment['thread_id']);
@@ -38,4 +38,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // 不正なアクセスの場合
 header("Location: home.php");
 exit;
-?>

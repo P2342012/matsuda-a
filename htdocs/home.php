@@ -26,15 +26,17 @@ $categories = $pdo->query("SELECT DISTINCT category FROM threads ORDER BY catego
 <div class="container">
     <header>
         <h1>スレッド一覧</h1>
-        <div class="user-info">
-            学籍番号: <?php echo h($_SESSION['student_id']); ?>
-            <?php if ($_SESSION['student_id'] === '9877389'): ?>
-                <span class="admin-badge">管理者</span>
-            <?php endif; ?>
-            <a href="logout.php" class="logout-btn">ログアウト</a>
-        </div>
-    </header>
 
+    </header>
+    // ...ユーザー情報表示部分にリンク追加
+    <div class="user-info">
+        学籍番号: <?php echo h($_SESSION['student_id']); ?>
+        <?php if (is_admin()): ?>
+            <span class="admin-badge">管理者</span>
+        <?php endif; ?>
+        <a href="account_edit.php" class="btn">アカウント情報変更</a>
+        <a href="logout.php" class="logout-btn">ログアウト</a>
+    </div>
     <div class="controls">
         <a href="create_thread.php" class="btn">スレッド作成</a>
 

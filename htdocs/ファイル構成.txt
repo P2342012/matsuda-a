@@ -18,4 +18,6 @@
 ├── delete.php
 ├── logout.php
 ├── table_editor.php
+├── register.php
+├── table_editor.php
 └── insert_table.php
