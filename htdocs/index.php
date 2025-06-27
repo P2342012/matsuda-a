@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 
 <?php include 'includes/header.php'; ?>
-// ...HTML部分にアカウント作成リンク追加
+//...HTML部分にアカウント作成リンク追加
 <div class="login-container">
     <h1>研究室共有システム</h1>
     <?php if (isset($error)): ?>

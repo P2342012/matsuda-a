@@ -30,7 +30,7 @@ $categories = $pdo->query("SELECT DISTINCT category FROM threads ORDER BY catego
     </header>
     // ...ユーザー情報表示部分にリンク追加
     <div class="user-info">
-        学籍番号: <?php echo h($_SESSION['student_id']); ?>
+        ログイン中: <?php echo h($_SESSION['name']??''); ?>
         <?php if (is_admin()): ?>
             <span class="admin-badge">管理者</span>
         <?php endif; ?>
@@ -88,10 +88,12 @@ $categories = $pdo->query("SELECT DISTINCT category FROM threads ORDER BY catego
                     </div>
 
                     <div class="thread-meta">
-                        <span>投稿者: <?php echo h($thread['created_by']); ?></span>
+                        <!-- 変更: 投稿者を学籍番号から登録名に変更 -->
+                        <span>投稿者: <?php echo h($thread['creator_name']); ?></span>
                         <span>投稿日時: <?php echo h($thread['created_at']); ?></span>
 
-                        <?php if ($_SESSION['student_id'] === $thread['created_by'] || $_SESSION['student_id'] === '9877389'): ?>
+
+                      <?php if ($_SESSION['student_id'] === $thread['created_by'] || is_admin()): ?>
                             <form method="post" action="delete.php" class="inline-form">
                                 <input type="hidden" name="thread_id" value="<?php echo $thread['thread_id']; ?>">
                                 <button type="submit" class="delete-btn" onclick="return confirm('本当に削除しますか？')">削除</button>
@@ -104,5 +106,4 @@ $categories = $pdo->query("SELECT DISTINCT category FROM threads ORDER BY catego
     </div>
 </div>
 </body>
-
 </html>

@@ -44,15 +44,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // 登録処理
-    if (empty($errors)) {
-        $password_hash = password_hash($password, PASSWORD_DEFAULT);
-        $stmt = $pdo->prepare("INSERT INTO users (student_id, name, password_hash) VALUES (?, ?, ?)");
-        $stmt->execute([$student_id, $name, $password_hash]);
+if (empty($errors)) {
+    $password_hash = password_hash($password, PASSWORD_DEFAULT);
+    $stmt = $pdo->prepare("INSERT INTO users (student_id, name, password_hash) VALUES (?, ?, ?)");
+    $stmt->execute([$student_id, $name, $password_hash]);
 
-        $_SESSION['success_message'] = "アカウント登録が完了しました。ログインしてください。";
-        header("Location: index.php");
-        exit;
-    }
+    // 追加: 登録後すぐにログイン状態にする
+    $_SESSION['student_id'] = $student_id;
+    $_SESSION['name'] = $name;
+    
+    $_SESSION['success_message'] = "アカウント登録が完了しました";
+    header("Location: home.php");
+    exit;
 }
 ?>
 

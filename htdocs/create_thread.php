@@ -10,8 +10,8 @@ if (!isset($_SESSION['student_id'])) {
 
 // カテゴリ定義
 $categories = [
-    '教科' => ['国語', '数学', '物理', '化学', '世界史', '日本史', '英語'],
-    '研究関連' => ['卒論', '研究内容相談', 'イベント'],
+    '教科' => ['数学', '英語', 'プログラミング', 'ソフトウェア', 'IT関連'],
+    '研究関連' => ['卒論', '研究内容相談','課題研究', 'イベント'],
     'その他' => ['趣味', '雑談', '気軽な相談']
 ];
 
@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-<?php include 'includes/header.php'; ?>
+<?php include 'includes/header.php'; ?> 
 <div class="container">
     <header>
         <h1>スレッド作成</h1>

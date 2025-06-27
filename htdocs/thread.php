@@ -12,7 +12,8 @@ if (!isset($_GET['id'])) {
     exit;
 }
 
-$stmt = $pdo->prepare("SELECT t.*, u.is_admin 
+// 修正: creator_nameを取得するように変更
+$stmt = $pdo->prepare("SELECT t.*, u.is_admin, u.name as creator_name 
                       FROM threads t
                       JOIN users u ON t.created_by = u.student_id
                       WHERE t.thread_id = ?");
@@ -24,7 +25,8 @@ if (!$thread) {
     exit;
 }
 
-$stmt = $pdo->prepare("SELECT c.*, u.is_admin 
+// 修正: commenter_nameを取得するように変更
+$stmt = $pdo->prepare("SELECT c.*, u.is_admin, u.name as commenter_name 
                       FROM comments c
                       JOIN users u ON c.student_id = u.student_id
                       WHERE c.thread_id = ?
@@ -50,8 +52,9 @@ unset($comment);
     <header>
         <h1><?= h($thread['title']) ?></h1>
         <div class="user-info">
-            学籍番号: <?= h($_SESSION['student_id']) ?>
-            <?php if ($_SESSION['student_id'] === '9877389'): ?>
+            <!-- 変更: 学籍番号から登録名に変更 -->
+            ログイン中: <?= h($_SESSION['name'] ?? '') ?>
+            <?php if (is_admin()): ?>
                 <span class="admin-badge">管理者</span>
             <?php endif; ?>
             <a href="home.php" class="btn">ホームに戻る</a>
@@ -61,14 +64,15 @@ unset($comment);
 
     <div class="thread-meta">
         <span>カテゴリ: <?= h($thread['category']) ?></span>
-        <span>作成者: <?= h($thread['created_by']) ?></span>
+        <!-- 変更: 作成者を学籍番号から登録名に変更 -->
+        <span>作成者: <?= h($thread['creator_name']) ?></span>
         <span>作成日時: <?= h($thread['created_at']) ?></span>
     </div>
 
     <div class="comment-section">
         <h2>コメント</h2>
 
-        <div class="comment-list">
+      <div class="comment-list">
             <?php if (empty($comments)): ?>
                 <p>コメントがありません</p>
             <?php else: ?>
@@ -76,14 +80,15 @@ unset($comment);
                     <div class="comment-item">
                         <div class="comment-header">
                             <span class="comment-author">
-                                <?= h($comment['student_id']) ?>
+                                <!-- 変更: 投稿者を学籍番号から登録名に変更 -->
+                                <?= h($comment['commenter_name']) ?>
                                 <?php if ($comment['is_admin']): ?>
                                     <span class="admin-badge">管理者</span>
                                 <?php endif; ?>
                             </span>
                             <span class="comment-date"><?= h($comment['created_at']) ?></span>
 
-                            <?php if ($_SESSION['student_id'] === $comment['student_id'] || $_SESSION['student_id'] === '9877389'): ?>
+                            <?php if ($_SESSION['student_id'] === $comment['student_id'] || is_admin()): ?>
                                 <form method="post" action="delete.php" class="inline-form">
                                     <input type="hidden" name="comment_id" value="<?= $comment['comment_id'] ?>">
                                     <button type="submit" class="delete-btn" onclick="return confirm('本当に削除しますか？')">削除</button>
